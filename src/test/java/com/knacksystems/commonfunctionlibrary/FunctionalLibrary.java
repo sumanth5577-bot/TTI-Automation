@@ -7,6 +7,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -110,7 +111,7 @@ public class FunctionalLibrary
 		}
 	}
 	
-	public static void typeAction(WebDriver driver, String locatorType, String locatorValue, String data)
+	public static void typeAction(WebDriver driver, String locatorType, String locatorValue, String data) throws InterruptedException
 	{
 		if(locatorType.equalsIgnoreCase("id"))
 		{
@@ -124,7 +125,9 @@ public class FunctionalLibrary
 		}
 		if(locatorType.equalsIgnoreCase("xpath"))
 		{
-			driver.findElement(By.xpath(locatorValue)).clear();
+			//driver.findElement(By.xpath(locatorValue)).clear();
+			/*Thread.sleep(4000);
+			backSpace(driver,locatorType,locatorValue);*/
 			driver.findElement(By.xpath(locatorValue)).sendKeys(data);
 		}
 		if(locatorType.equalsIgnoreCase("cssSelector"))
@@ -163,7 +166,7 @@ public class FunctionalLibrary
 	public static String generateDate()
 	{
 		Date date=new Date();
-		SimpleDateFormat sdf=new SimpleDateFormat("YYYY_MM_dd_HH_mm_ss");
+		SimpleDateFormat sdf=new SimpleDateFormat("MM/dd/YYYY");
 		return sdf.format(date);
 	}
 	
@@ -522,6 +525,7 @@ public class FunctionalLibrary
 			{
 				if(ele.isDisplayed())
 				{
+					System.out.println("Locator found in this frame");
 					driver.switchTo().frame(i);
 				}
 				else
@@ -534,10 +538,11 @@ public class FunctionalLibrary
 		
 	}
 	
-	public static void frameSize(WebDriver driver)
+	public static void frameSwitch(WebDriver driver)
 	{
 		int size = driver.findElements(By.tagName("iframe")).size();
 		System.out.println("NO.OF FRAMES ARE: "+size);
+		driver.switchTo().frame(0);
 	}
 	
 	public static void waitForClickable(WebDriver driver, String locatorType, String locatorValue, String data)
@@ -589,7 +594,7 @@ public class FunctionalLibrary
 	    }
 	}
 	
-	public static void links(WebDriver driver) throws Throwable
+	public static void links(WebDriver driver) throws Throwable, MalformedURLException
 	{
 		 String url="";
 		 HttpURLConnection huc = null;
@@ -629,10 +634,10 @@ public class FunctionalLibrary
 	     }
 	}
 	
-	public static void uploadFile(WebDriver driver) throws AWTException
+	public static void uploadFile(WebDriver driver, String data) throws AWTException, InterruptedException
 	{
 		
-		String path = "D:\\QO.csv";
+		String path = data;
 		StringSelection ss=new StringSelection(path);
 		Clipboard cb=Toolkit.getDefaultToolkit().getSystemClipboard();
 		cb.setContents(ss, ss);
@@ -641,6 +646,7 @@ public class FunctionalLibrary
 		r.keyPress(KeyEvent.VK_V);
 		r.keyRelease(KeyEvent.VK_V);
 		r.keyRelease(KeyEvent.VK_CONTROL);
+		Thread.sleep(5000);
 		r.keyPress(KeyEvent.VK_ENTER);
 		r.keyRelease(KeyEvent.VK_ENTER);
 	}
@@ -672,4 +678,34 @@ public class FunctionalLibrary
 		}
 	}
 	
+	public static void keyActions(WebDriver driver, String action) throws AWTException
+	{
+		Robot r=new Robot();
+		if(action.equalsIgnoreCase("Tab"))
+		{
+			r.keyPress(KeyEvent.VK_TAB);
+			r.keyRelease(KeyEvent.VK_TAB);
+		}
+		
+		if(action.equalsIgnoreCase("Select All"))
+		{
+			r.keyPress(KeyEvent.VK_CONTROL);
+			r.keyPress(KeyEvent.VK_A);
+			r.keyRelease(KeyEvent.VK_A);
+			r.keyRelease(KeyEvent.VK_CONTROL);
+		}
+	}
+	
+	public static void clearText(WebDriver driver, String locatorType, String locatorValue)
+	{
+		if(locatorType.equalsIgnoreCase("xpath"))
+		{
+			driver.findElement(By.xpath(locatorValue)).clear();
+		}
+	}
+	
+	public static void quitWin(WebDriver driver)
+	{
+		driver.quit();
+	}
 }
