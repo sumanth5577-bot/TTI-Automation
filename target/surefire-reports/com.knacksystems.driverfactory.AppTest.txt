@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.knacksystems.driverfactory.AppTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 29.612 sec
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 473.014 sec
